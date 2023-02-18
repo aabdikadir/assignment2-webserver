@@ -21,7 +21,7 @@ def webServer(port=13331):
    IP = '127.0.0.1'  # all interfaces
    PORT = 13331
    #testing if connection was established
-   print(f"Connection from {IP} has been established.")
+   #print(f"Connection from {IP} has been established.")
    serverSocket.listen(1)
   #Fill in end
 
@@ -39,15 +39,21 @@ def webServer(port=13331):
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
       f = open(filename[1:], 'rb') #fill in start #fill in end)
       # Set the response headers.
-      outputdata = b"HTTP/1.1 200 OK\r\n"
-      outputdata += b"Content-Type: text/html; charset=UTF-8\r\n"
-      outputdata += b"\r\n"
+      
+      
+      #outputdata = b"HTTP/1.1 200 OK\r\n"
+      #outputdata += b"Content-Type: text/html; charset=UTF-8\r\n"
+      #outputdata += b"\r\n"
       
       #print(f"Received {outputdata!r}") #testing if receiving data.
       
       #fill in end
       
       outputdata = b"Content-Type: text/html; charset=UTF-8\r\n"
+        
+      connectionSocket.send(b"HTTP/1.1 200 OK\r\n")
+      connectionSocket.send(outputdata)
+      connectionSocket.send(b"\r\n")
       #Fill in start -This variable can store your headers you want to send for any valid or invalid request. 
       #Content-Type above is an example on how to send a header as bytes
       #Fill in end
@@ -71,16 +77,13 @@ def webServer(port=13331):
       
     except Exception as e:
     # Send response message for invalid request due to the file not being found (404)
-        outputdata = b"HTTP/1.1 404 Not Found\r\n"
-        outputdata += b"Content-Type: text/html; charset=UTF-8\r\n"
-        outputdata += b"\r\n"
-        outputdata += b"<html><body><h1>Error 404: File not found</h1></body></html>"print("Error receiving data: %s" % e)
-     
+        connectionSocket.send(b"HTTP/1.1 404 Not Found\r\n")
+        connectionSocket.send(b"\r\n")
+        connectionSocket.send(b"<html><head></head><body><h1>404 Not Found</h1></body></html>\r\n")
      
       #Fill in start
       # Send the response to the client.
-        connectionSocket.send(outputdata)
-        connectionSocket.close()
+       
 
       #Fill in end
 
