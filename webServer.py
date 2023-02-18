@@ -32,12 +32,16 @@ def webServer(port=13331):
     connectionSocket, addr = serverSocket.accept() #Fill in start -are you accepting connections?     #Fill in end
     
     try:
-      message = connectionSocket.recv(1024) # 1MB is enough #Fill in start -a client is sending you a message   #Fill in end 
+      message = connectionSocket.recv(1024).decode() # 1MB is enough #Fill in start -a client is sending you a message   #Fill in end 
       filename = message.split()[1]
       
       #opens the client requested file. 
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-      f = open(filename[1:], "rb") #fill in start #fill in end)
+      f = open(filename[1:], 'rb') #fill in start #fill in end)
+      # Set the response headers.
+      outputdata = b"HTTP/1.1 200 OK\r\n"
+      outputdata += b"Content-Type: text/html; charset=UTF-8\r\n"
+      outputdata += b"\r\n"
       
       #print(f"Received {outputdata!r}") #testing if receiving data.
       
@@ -51,7 +55,7 @@ def webServer(port=13331):
       #Send an HTTP header line into socket for a valid request. What header should be sent for a response that is ok? 
       #Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
       #Fill in start
-      connectionSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n'.encode())
+      connectionSocket.send(outputdata)
       
       #Fill in end
                
@@ -66,10 +70,17 @@ def webServer(port=13331):
       connectionSocket.close() #closing the connection socket
       
     except Exception as e:
-      print("Error receiving data: %s" % e)
-      # Send response message for invalid request due to the file not being found (404)
+    # Send response message for invalid request due to the file not being found (404)
+        outputdata = b"HTTP/1.1 404 Not Found\r\n"
+        outputdata += b"Content-Type: text/html; charset=UTF-8\r\n"
+        outputdata += b"\r\n"
+        outputdata += b"<html><body><h1>Error 404: File not found</h1></body></html>"print("Error receiving data: %s" % e)
+     
+     
       #Fill in start
-      connectionSocket.send('HTTP/1.1 404 Not Found\r\n'.encode())
+      # Send the response to the client.
+        connectionSocket.send(outputdata)
+        connectionSocket.close()
 
       #Fill in end
 
