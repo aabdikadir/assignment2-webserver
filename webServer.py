@@ -19,6 +19,8 @@ def webServer(port=13331):
     serverSocket.bind(("", port))
 
     # Fill in start
+    IP = '0.0.0.0'  # all interfaces
+    PORT = 13331
     # testing if connection was established
     # print(f"Connection from {IP} has been established.")
     serverSocket.listen(1)
