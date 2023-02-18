@@ -38,8 +38,8 @@ def webServer(port=13331):
       #opens the client requested file. 
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
       f = open(filename[1:], encoding='utf-8') #fill in start #fill in end)
-      outputdata = f.read()
-      print(f"Received {outputdata!r}") #testing if receiving data.
+      
+      #print(f"Received {outputdata!r}") #testing if receiving data.
       
       #fill in end
       
@@ -51,7 +51,7 @@ def webServer(port=13331):
       #Send an HTTP header line into socket for a valid request. What header should be sent for a response that is ok? 
       #Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
       #Fill in start
-      connectionSocket.send('HTTP/1.1 200 OK\r\n\r\n'.encode())
+      connectionSocket.send(bytes('HTTP/1.1 200 OK\r\n\r\n'.encode())
       
       #Fill in end
                
@@ -79,8 +79,8 @@ def webServer(port=13331):
       #Fill in end
 
   #Commenting out the below, as its technically not required and some students have moved it erroneously in the While loop. DO NOT DO THAT OR YOURE GONNA HAVE A BAD TIME.
-  #serverSocket.close()
-  #sys.exit()  # Terminate the program after sending the corresponding data
+  serverSocket.close()
+  sys.exit()  # Terminate the program after sending the corresponding data
 
 if __name__ == "__main__":
   webServer(13331)
